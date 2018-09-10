@@ -123,12 +123,15 @@ function processFormulaText (session: builder.Session, text: string, modelStorag
         let expandedFormula = BMAApi.getExpandedFormula(bmaModel.Model, ltl.states, ltl.operations[0])
         BMAApi.runFastSimulation(bmaModel.Model, expandedFormula, simulationOptions).then(responseFast => {
             BMAApi.runThoroughSimulation(bmaModel.Model, expandedFormula, responseFast, simulationOptions).then(responseThorough => {
-                if (responseThorough.Status) {
+	    	if (responseThorough.Status) {
+		    console.log('BMAApi- Sometimes')
                     session.send(strings.SIMULATION_DUALITY(steps))
-                } else if (responseFast.Status) {
+		} else if (responseFast.Status) {
+		    console.log('BMAApi- Always true')
                     session.send(strings.SIMULATION_ALWAYS_TRUE(steps))
                 } else {
-                    session.send(strings.SIMULATION_ALWAYS_FALSE(steps))
+		    console.log('BMAApi- Always false')
+		    session.send(strings.SIMULATION_ALWAYS_FALSE(steps))
                 }
             }).catch(e => {
                 if (e.code === 'ETIMEDOUT') {
