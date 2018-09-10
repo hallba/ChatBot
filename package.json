@@ -7,6 +7,10 @@
     "Maik Riechert",
     "Zara Ahmed"
   ],
+  "engines":  { 
+	  "node" : ">=7.2.0",
+	  "npm"  : ">=3.10.0"
+  },
   "scripts": {
     "compile": "tsc & exit 0",
     "postinstall": "npm run compile",
