@@ -15,6 +15,9 @@ import { setup as setupBot } from './bot'
 
 let port = config.get('PORT')
 console.log('starting server on port:', port)
+let appid = config.get('APP_ID')
+console.log('Checking app_id:', appid)
+
 
 let server = express()
 server.listen(port)
