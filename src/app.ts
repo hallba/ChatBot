@@ -15,6 +15,8 @@ import { setup as setupBot } from './bot'
 
 let port = config.get('PORT')
 console.log('starting server on port:', port)
+let luisid = config.get('LUIS_MODEL_ID')
+console.log('Checking luis_model_id:', luisid)
 let appid = config.get('APP_ID')
 console.log('Checking app_id:', appid)
 
