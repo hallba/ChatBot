@@ -7,6 +7,7 @@
     "Maik Riechert",
     "Zara Ahmed"
   ],
+  "engineStrict" : true,
   "engines":  { 
 	  "node" : ">=7.2.0 <10.0.0",
 	  "npm"  : ">=3.10.0"
