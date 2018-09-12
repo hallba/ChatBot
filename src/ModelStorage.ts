@@ -55,7 +55,8 @@ export class BlobModelStorage implements ModelStorage {
                     throw error
                 }
             })
-        })
+	    console.log('service properties set')
+	    })
         console.log('Creating containers') 
         // create containers
         for (let container of [USER_MODELS, GENERATED_MODELS]) {
@@ -67,7 +68,7 @@ export class BlobModelStorage implements ModelStorage {
                 }
             })
         }
-	console.log("Storage setup complete")	
+	//console.log("Storage setup complete")	
 }
 
     storeUserModel (id: string, model: BMA.ModelFile) : Promise<boolean> {
