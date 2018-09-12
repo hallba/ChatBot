@@ -17,10 +17,17 @@ import {ModelStorage} from './ModelStorage'
  * @param skipBMAAPI If true, then the BMA backend is not used to test formulas that the user sends. 
  */
 export function setup (bot: builder.UniversalBot, modelStorage: ModelStorage, skipBMAAPI = false) {
+    console.log("Setup initialise")
     registerMiddleware(bot)
+    console.log("Middleware registered")
     registerLUISDialog(bot, modelStorage)
+    console.log("LUIS registered")
     registerTutorialDialogs(bot)
+    console.log("Tutorials registered")
     registerFormulaDialog(bot, modelStorage, skipBMAAPI)
+    console.log("Formula dialogs registered")
     registerFormulaHistoryDialogs(bot)
+    console.log("Formula history registered")
     registerModelStorageDialogs(bot, modelStorage)
+    console.log("Storage registered")
 }
