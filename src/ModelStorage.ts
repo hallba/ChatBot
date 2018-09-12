@@ -56,7 +56,7 @@ export class BlobModelStorage implements ModelStorage {
                 }
             })
         })
-        
+        console.log('Creating containers') 
         // create containers
         for (let container of [USER_MODELS, GENERATED_MODELS]) {
             this.blobService.createContainerIfNotExists(container, {
@@ -67,7 +67,8 @@ export class BlobModelStorage implements ModelStorage {
                 }
             })
         }
-    }
+	console.log("Storage setup complete")	
+}
 
     storeUserModel (id: string, model: BMA.ModelFile) : Promise<boolean> {
         // TODO think about expiration
