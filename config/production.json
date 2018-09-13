@@ -3,6 +3,6 @@
     "PROTOCOL": "https",
     "SERVE_STATIC_VIA_EXPRESS": "0",
     "BMA_URL": "http://biomodelanalyzer.org/tool.html",
-    "BMA_BACKEND_URL": "https://bmacomputefunc.cloudapp.net/api/",
+    "BMA_BACKEND_URL": "http://bmacomputefunc.azurewebsites.net/api/",
     "ENABLE_SPELLCHECK": "1"
 }
