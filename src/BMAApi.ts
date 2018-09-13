@@ -54,7 +54,8 @@ export function runFastSimulation (model: BMA.Model, formula: string, options: S
             timeout: (options.timeout || DefaultSimOptions.timeout) * 1000
         }, (error, response, body) => {
             if (error) {
-                reject(error)
+	        //console.log("Error on fast LTL check")
+	        reject(error)
                 return
             }
 	    //console.log('Fast result = ' + String(body.Status))
@@ -107,10 +108,15 @@ export function runThoroughSimulation(model: BMA.Model, formula: string, fastSim
                 reject(error)
                 return
             }
-	    body.Item1.Status = body.Item1.Status === 1; // Translate integer to boolean in Status field
-	    let resp = body.Item1 as AnalyzeLTLSimulationResponse
 	    //console.log('Thorough result = ' + JSON.stringify(body))
-	    //console.log('T.status = ' + String(body.Item1.Status))
+	    if (body.Item1 == null) {
+	    var result = body.m_Item1
+	    } else {
+	    var result = body.Item1
+	    } 
+	    result.Status = result.Status === 1; // Translate integer to boolean in Status field
+	    let resp = result as AnalyzeLTLSimulationResponse
+	    //console.log('T.status = ' + String(result.Status))
 	    //console.log('T.status = ' + String(resp.Status))
             if (resp.Error) {
                 reject({ message: resp.Error })
