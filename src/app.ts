@@ -30,15 +30,17 @@ if (config.get('SERVE_STATIC_VIA_EXPRESS') === '1') {
 let bot: builder.UniversalBot
 if (config.get('USE_CONSOLE') === '1') {
     // Create console bot
+    var inMemoryStorage = new builder.MemoryBotStorage();    
     let connector = new builder.ConsoleConnector().listen()
-    bot = new builder.UniversalBot(connector)
+    bot = new builder.UniversalBot(connector,{storage:inMemoryStorage});
 } else {
+    var inMemoryStorage = new builder.MemoryBotStorage();
     // Create server bot
     let connector = new builder.ChatConnector({
         appId: config.get<string>('APP_ID'),
         appPassword: config.get<string>('APP_PASSWORD')
     })
-    bot = new builder.UniversalBot(connector)
+    bot = new builder.UniversalBot(connector,{storage:inMemoryStorage});
     server.post('/api/messages', connector.listen())
 }
 
