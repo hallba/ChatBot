@@ -34,11 +34,10 @@ The final step is to create a local configuration file `config/local.json` with 
 }
 ```
 
-You can find all credentials in the [shared OneDrive folder][onedrive].
-For access permissions ask [mailto:matjoh@microsoft.com](Matthew Johnson).
-
 By default, in development mode the bot is run as a local server without authentication
-and works out of the box with the Bot Framework Emulator and Azure Storage Emulator.
+and works out of the box with the Bot Framework Emulator and Azure Storage Emulator. Due to
+security settings on the main deployment its recommended that developers clone and run a local 
+version of the BMA for testing, using the "BuildAndRun.ps1" script in that repository.
 
 To run the bot inside a console without server, add `"USE_CONSOLE": "1"` to `config/local.json`.
 Note that this mode has limited features (e.g. no attachment support).
@@ -80,9 +79,6 @@ To get code coverage for the tests, run:
 $ npm run coverage
 ```
 
-The project has automated testing (continuous integration) set up in Visual Studio Team Services on every git push.
-See [the VSTS project](https://msrcapt.visualstudio.com/BMAChatBot/_build) to view the test history.
-
 ### Adding dependencies
 
 To make TypeScript happy, you need to supply it with typing definitions of all package dependencies.
@@ -92,24 +88,30 @@ and install them with `npm install --save @types/...`.
 
 ### Deployment
 
-The production chat bot is hosted on https://bmachatbot.azurewebsites.net/.
-Deployment happens manually by creating a new "Production" release in https://msrcapt.visualstudio.com/BMAChatBot.
+The production chat bot is hosted on https://bmabot.azurewebsites.net/ as an Azure Web App.
+Deployment happens automatically on pushing to the chatbot branch on the main repository. 
 
-The dev version is hosted on https://bmachatbot-dev.azurewebsites.net/.
-Deployment happens automatically each day at 8am or by manually creating a new "Development" release in https://msrcapt.visualstudio.com/BMAChatBot.
+New deployments can be linked to the main or alternative repositories in a similar way through
+azure/git integration. 
 
-You can also deploy from the command-line with:
+Deployed web app must have the following variables set in Application settings:
 
-```sh
-$ git remote add azure-dev https://bmabotdeploy@bmachatbot-dev.scm.azurewebsites.net:443/bmachatbot-dev.git
-$ git remote add azure-prod https://bmabotdeploy@bmachatbot.scm.azurewebsites.net:443/bmachatbot.git
-$ git push azure-dev master
-$ # or: git push azure-prod +0.1.0~0:master
-```
+- MICROSOFT_APP_ID = Bot App ID
 
-For git deployment, you need the deployment password which can be found in the [shared OneDrive folder][onedrive].
+- MICROSOFT_APP_PASSWORD = Bot App Password
 
-Deployment logs can be found in the release logs of https://msrcapt.visualstudio.com/BMAChatBot.
+- BING_SPELLCHECK_KEY = Key for bing spellcheck
+
+- LUIS_MODEL_ID = Model on luis service. This can be created by uploading the model in ChatBot/src/LUIS
+
+- LUIS_KEY = LUIS key
+
+- AZURE_STORAGE_ACCOUNT = blob storage account
+
+- AZURE_STORAGE_ACCESS_KEY = key for storage account
+
+Setting any more variables risks the deployed bot giving cryptic 500 errors due to clashes
+between application settings and automatically set variables.
 
 #### Debugging
 
@@ -119,14 +121,13 @@ and setting breakpoints appropriately.
 If an error occurs only when deployed, then looking at live logs in the Azure Portal often helps,
 as exceptions are visible there and other log output. The following describes how to do that:
 
-1. Find the bmachatbot[dev] project on https://portal.azure.com/
+1. Find the bma chat bot project on https://portal.azure.com/
 2. Go to the "Monitoring" -> "Diagnostics" tab and enable "Application Logging (Filesystem)"
 3. Go to the "Monitoring" -> "Log stream" tab and observe the live log output
 
 A different way to explore the deployed app service is via [Kudu](https://github.com/projectkudu/kudu/wiki):
 
-- https://bmachatbot.scm.azurewebsites.net/
-- https://bmachatbotdev.scm.azurewebsites.net/
+- https://bmabot.scm.azurewebsites.net/
 
 #### Articles
 
