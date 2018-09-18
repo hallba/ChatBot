@@ -86,29 +86,37 @@ A few libraries have those embedded, but most of them don't.
 For the latter case, search for definitions on <http://microsoft.github.io/TypeSearch/> 
 and install them with `npm install --save @types/...`.
 
+### Adding new features
+
+The basic workflow below shows you how to add new features, with a worked example of stability proving.
+
+* Add a new intent to the LUIS model, with utterances
+** e.g. intent = Stability, utterance = "Is the model stable" etc
+* Retrain the model and publish
+* Edit the function registerLUISDialog in src/dialogs/luis.ts to add a check for your new intent. For testing purposes, you can return the hard coded PROTOTYPE string
+>matches('Stability', (session) => {
+>    session.send(strings.PROTOTYPE)
+>})
+
 ### Deployment
 
 The production chat bot is hosted on https://bmabot.azurewebsites.net/ as an Azure Web App.
 Deployment happens automatically on pushing to the chatbot branch on the main repository. 
 
 New deployments can be linked to the main or alternative repositories in a similar way through
-azure/git integration. 
+azure/git integration. To get a working bot you will need a luis model published on https://www.luis.ai/
+(import the json in src/luis, train and publish), an azure bot service ID and password, and an azure
+blob storage account and key. 
 
 Deployed web app must have the following variables set in Application settings:
 
-- MICROSOFT_APP_ID = Bot App ID
-
-- MICROSOFT_APP_PASSWORD = Bot App Password
-
-- BING_SPELLCHECK_KEY = Key for bing spellcheck
-
-- LUIS_MODEL_ID = Model on luis service. This can be created by uploading the model in ChatBot/src/LUIS
-
-- LUIS_KEY = LUIS key
-
-- AZURE_STORAGE_ACCOUNT = blob storage account
-
-- AZURE_STORAGE_ACCESS_KEY = key for storage account
+* MICROSOFT_APP_ID = Bot App ID
+* MICROSOFT_APP_PASSWORD = Bot App Password
+* BING_SPELLCHECK_KEY = Key for bing spellcheck
+* LUIS_MODEL_ID = Model on luis service. This can be created by uploading the model in ChatBot/src/LUIS
+* LUIS_KEY = LUIS key
+* AZURE_STORAGE_ACCOUNT = blob storage account
+* AZURE_STORAGE_ACCESS_KEY = key for storage account
 
 Setting any more variables risks the deployed bot giving cryptic 500 errors due to clashes
 between application settings and automatically set variables.
