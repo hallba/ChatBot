@@ -91,10 +91,10 @@ and install them with `npm install --save @types/...`.
 The basic workflow below shows you how to add new features, with a worked example of stability proving.
 
 * Add a new intent to the LUIS model, with utterances
-** e.g. intent = Stability, utterance = "Is the model stable" etc
+ * e.g. intent = Stability, utterance = "Is the model stable" etc
 * Retrain the model and publish
 * Edit the function registerLUISDialog in src/dialogs/luis.ts to add a check for your new intent. For testing purposes, you can return the hard coded PROTOTYPE string
->matches('Stability', (session) => {
+ *>matches('Stability', (session) => {
 >    session.send(strings.PROTOTYPE)
 >})
 
