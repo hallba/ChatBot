@@ -10,6 +10,7 @@ import {registerFormulaHistoryDialogs} from './dialogs/formulaHistory'
 import {registerFormulaDialog} from './dialogs/formula'
 import {registerModelStorageDialogs} from './dialogs/modelStorage'
 import {ModelStorage} from './ModelStorage'
+import {registerStabilityDialog} from './dialogs/stability'
 
 /** 
  * Registers all dialogs and middlewares onto the given bot instance.
@@ -30,4 +31,5 @@ export function setup (bot: builder.UniversalBot, modelStorage: ModelStorage, sk
     console.log("Formula history registered")
     registerModelStorageDialogs(bot, modelStorage)
     console.log("Storage registered")
+    registerStabilityDialog(bot, modelStorage, skipBMAAPI)
 }

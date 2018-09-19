@@ -271,3 +271,85 @@ export interface SimulationTickVariable {
     /** integer */
     Hi: number
 }
+
+/**
+ * Runs stability analysis against the public BMA server
+ */
+export function runStabilityAnalysis (model: BMA.Model): Promise<AnalyzeLTLSimulationResponse> {
+    console.log(`running stability analysis`)
+    let url = BACKEND_URL + 'Analyze'
+    let req: AnalyzeStabilityRequest = {
+        Name: model.Name,
+        Relationships: model.Relationships,
+        Variables: model.Variables
+    }
+
+    return new Promise((resolve, reject) => {
+        request.post(url, {
+            body: req,
+            json: true,
+            timeout: DefaultSimOptions.timeout * 1000
+        }, (error, response, body) => {
+            if (error) {
+	        //console.log("Error on fast LTL check")
+	        reject(error)
+                return
+            }
+	    //console.log('Fast result = ' + String(body.Status))
+	    body.Status = body.Status === 1; // Translate integer to boolean in Status field
+            let resp = body as AnalyzeLTLSimulationResponse
+            if (resp.Error) {
+                reject({ message: resp.Error })
+                console.error(resp.ErrorMessages)
+                return
+            }
+            resolve(resp)
+        })
+    })
+}
+
+/**
+ * The JSON format for an AnalyzeStability API request.
+ * 
+ * This request is typically very fast (few seconds) 
+ * 
+ * The response of this request 
+ * can only assert one of the following two:
+ * - The model is stable.
+ * - The analysis is inconclusive
+ * It does not give a definite answer. To get this "further testing"
+ * must be run
+ */
+interface AnalyzeStabilityRequest {
+    // the following properties are an inlined BmaModel
+    Name: string
+    Variables: BMA.Variable[]
+    Relationships: BMA.VariableRelationship[]
+}
+
+/**
+ * The JSON format for an AnalyzeStability API response.
+ */
+export interface AnalyzeStabilityResponse {
+    /** 
+     * True, if the formula is true for some simulations.
+     * False, if the formula is false for some simulations.
+     * 
+     * The boolean does not imply anything about the opposite.
+     * A AnalyzeLTLPolarity API request has to be made to determine
+     * whether the formula is true (false) for all simulations,
+     * or whether it is true for some and false for other simulations. 
+     */
+    Status: string
+
+    /** If an error occurs, then this contains the error message. */
+    Error?: string
+    
+    Ticks: SimulationTick[]
+    
+    /** Detailed error messages. This may be null even if Error is defined. */
+    ErrorMessages?: string[]
+
+    /** Detailed debug messages. */
+    DebugMessages?: string[]
+}

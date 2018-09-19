@@ -48,7 +48,7 @@ export function registerLUISDialog (bot: builder.UniversalBot, modelStorage: Mod
     })
     
     matches('Stability', (session) => {
-        session.send(strings.PROTOTYPE)
+        session.beginDialog('/stability')
     })
 
     matches('AboutLTL', (session) => {

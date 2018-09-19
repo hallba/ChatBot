@@ -28,7 +28,9 @@ export let NO_MODEL_FOUND = 'I do not have a model from you.'
 export let MODEL_REMOVED = 'I removed your model.'
 export let FORMULA_SHORTCUT = (variableName: string) => `PRO TIP: You can also use the !formula shortcut to test a formula: "!formula ${variableName} is 1"`
 export let FORMULA_COUNT_100 = 'Congratulations! This is your 100th formula! Keep going.'
-export let PROTOTYPE = 'This is a prototype feature that may be incomplete.'
+export let PROTOTYPE_WARNING = 'Warning: this is a prototype feature and may be incomplete.'
+export let PROTOTYPE_INCOMPLETE = 'This prototype feature is incomplete'
+export let API_UNAVAILABLE = 'This analysis will not be run as the BMA API is disabled.'
 
 // Formula history
 export let FORMULA_HISTORY = (formulas: string) => `I have the following formulas on record: \n\n ${formulas}`
@@ -101,3 +103,5 @@ export let STEPS = 'The number of steps determines how long your query runs for,
 export let DECREASE_STEPS = 'Decreasing the number of steps a query runs for can limit your results, as you only see a subsection of results which may or may not satisfy your query. The default of 10 steps is recommended.'
 export let INCREASE_STEPS = 'Increasing the number of steps will give you a broader view of how the state values fluctuate over time, and may reveal several traces of your query being true.'
 
+//Stability proof
+export let STABLE_MODEL = 'The model is stable.'
