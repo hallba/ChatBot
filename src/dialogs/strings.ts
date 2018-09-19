@@ -28,6 +28,7 @@ export let NO_MODEL_FOUND = 'I do not have a model from you.'
 export let MODEL_REMOVED = 'I removed your model.'
 export let FORMULA_SHORTCUT = (variableName: string) => `PRO TIP: You can also use the !formula shortcut to test a formula: "!formula ${variableName} is 1"`
 export let FORMULA_COUNT_100 = 'Congratulations! This is your 100th formula! Keep going.'
+export let PROTOTYPE = 'This is a prototype feature that may be incomplete.'
 
 // Formula history
 export let FORMULA_HISTORY = (formulas: string) => `I have the following formulas on record: \n\n ${formulas}`
