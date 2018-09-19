@@ -275,7 +275,7 @@ export interface SimulationTickVariable {
 /**
  * Runs stability analysis against the public BMA server
  */
-export function runStabilityAnalysis (model: BMA.Model): Promise<AnalyzeLTLSimulationResponse> {
+export function runStabilityAnalysis (model: BMA.Model): Promise<AnalyzeStabilityResponse> {
     console.log(`running stability analysis`)
     let url = BACKEND_URL + 'Analyze'
     let req: AnalyzeStabilityRequest = {
@@ -296,8 +296,8 @@ export function runStabilityAnalysis (model: BMA.Model): Promise<AnalyzeLTLSimul
                 return
             }
 	    //console.log('Fast result = ' + String(body.Status))
-	    body.Status = body.Status === 1; // Translate integer to boolean in Status field
-            let resp = body as AnalyzeLTLSimulationResponse
+	    //body.Status = body.Status === 1; // Translate integer to boolean in Status field
+            let resp = body as AnalyzeStabilityResponse
             if (resp.Error) {
                 reject({ message: resp.Error })
                 console.error(resp.ErrorMessages)

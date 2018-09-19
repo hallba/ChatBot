@@ -44,6 +44,7 @@ function testStability (session: builder.Session, text: string, modelStorage: Mo
     }) */
     BMAApi.runStabilityAnalysis(bmaModel.Model).then(response => {
     console.log('Stability response :' + JSON.stringify(response))
+    session.send('The model is :' + response.Status)
     })
     session.send(strings.PROTOTYPE_INCOMPLETE)
 }
