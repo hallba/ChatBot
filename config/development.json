@@ -8,7 +8,7 @@
     "APP_PASSWORD": null,
     "AZURE_STORAGE_ACCOUNT": "UseDevelopmentStorage=true",
     "AZURE_STORAGE_ACCESS_KEY": null,
-    "BMA_URL": "http://localhost:8224/tool.html",
+    "BMA_URL": "http://biomodelanalyzer.org/tool.html",
     "BMA_BACKEND_URL": "http://localhost:8224/api/",
     "ENABLE_SPELLCHECK": "1"
 }
