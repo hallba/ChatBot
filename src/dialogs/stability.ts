@@ -23,11 +23,18 @@ export function registerStabilityDialog (bot: builder.UniversalBot, modelStorage
         (session, results, next) => session.endDialog()
     ])
     bot.dialog('/furtherTesting', [
-        (session, args, next) => builder.Prompts.confirm(session, strings.STABILITY_INCONCLUSIVE),
+        (session, args: BMAApi.AnalyzeStabilityResponse, next) => {
+            //let initialResult = args
+            session.conversationData.previousResult = args
+            session.save()
+            builder.Prompts.confirm(session, strings.STABILITY_INCONCLUSIVE)
+        },
         (session, results: builder.IPromptChoiceResult, next) => {
             if (results.response) {
+                //furtherTesting(session)
+                //session.send( )
                 furtherTesting(session)
-                session.send(strings.PROTOTYPE_INCOMPLETE)
+                delete session.conversationData.previousResult
                 session.endDialog()
             } else {
                 session.send(strings.OK)
@@ -38,7 +45,7 @@ export function registerStabilityDialog (bot: builder.UniversalBot, modelStorage
     bot.dialog('/stability', [
         //Add check for BMA API availability
         (session, args, next) => {
-            session.send(strings.PROTOTYPE_WARNING)
+            //session.send(strings.PROTOTYPE_WARNING)
             // check if JSON model has been uploaded already, otherwise prompt user
             if (!session.conversationData.bmaModel) {
                 session.beginDialog('/checkModel')
@@ -64,7 +71,7 @@ function testStability (session: builder.Session) {
     if (response.Status == "Stabilizing") {
         session.send(strings.STABILITY_PROVED)
     } else if (response.Status = "NotStabilizing") {
-        session.beginDialog('/furtherTesting')
+        session.beginDialog('/furtherTesting', response)
     } else {
         session.send(strings.BAD_RESULT)
     }
@@ -75,5 +82,24 @@ function testStability (session: builder.Session) {
 
 function furtherTesting (session: builder.Session) {
     let bmaModel: BMA.ModelFile = session.conversationData.bmaModel
-
+    let previous = session.conversationData.previousResult
+    BMAApi.runFurtherTesting(bmaModel.Model,previous).then(response => {
+        //console.log('Further testing response :' + JSON.stringify(response))
+        for (let cex of response.CounterExamples) {
+            if (cex.Status == "Cycle") {
+                let steps = cex.Variables.length / bmaModel.Model.Variables.length
+                session.send(strings.FOUND_CYCLE(steps))
+            } else if (cex.Status == "Bifurcation") {
+                session.send(strings.FOUND_BIFURCATION)
+            }
+        }
+        if (response.CounterExamples.length == 1 && response.CounterExamples[0].Status=="Fixpoint") {
+                session.send(strings.STABILITY_PROVED)
+        } else if (response.CounterExamples.length == 0) {
+                session.send(strings.BAD_RESULT)
+        }
+        
+        
+        //session.send(strings.PROTOTYPE_INCOMPLETE)
+    })
 }

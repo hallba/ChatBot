@@ -353,3 +353,99 @@ export interface AnalyzeStabilityResponse {
     /** Detailed debug messages. */
     DebugMessages?: string[]
 }
+
+export function runFurtherTesting (model: BMA.Model, analysis: AnalyzeStabilityResponse) : Promise<FurtherTestingResponse> {
+    console.log(`running further testing`)
+    let url = BACKEND_URL + 'FurtherTesting'
+    let mod: AnalyzeStabilityRequest = {
+        Name: model.Name,
+        Relationships: model.Relationships,
+        Variables: model.Variables
+    }
+    console.log("test"+analysis.Status)
+    let req: FurtherTestingRequest = {
+        Model: mod,
+        Analysis: analysis,
+        //EnableLogging: true
+    }
+
+    return new Promise((resolve, reject) => {
+        request.post(url, {
+            body: req,
+            json: true,
+            timeout: DefaultSimOptions.timeout * 1000
+        }, (error, response, body) => {
+            if (error) {
+	        //console.log("Error on fast LTL check")
+	        reject(error)
+                return
+            }
+	    //console.log('Fast result = ' + String(body.Status))
+	    //body.Status = body.Status === 1; // Translate integer to boolean in Status field
+            let resp = body as FurtherTestingResponse
+            if (resp.Error) {
+                reject({ message: resp.Error })
+                console.error(resp.ErrorMessages)
+                return
+            }
+            resolve(resp)
+        })
+    })
+}
+
+/**
+ * The JSON format for an FurtherTesting API request.
+ * 
+ * This request is model dependent 
+ * 
+ * The response of this request 
+ * can only assert a combination of the following:
+ * - The model is fixpoint
+ * - The model has a cycle
+ * - The model has a bifurcation
+ * 
+ * If it only has a fixpoint, it is stable
+ */
+interface FurtherTestingRequest {
+    Model: AnalyzeStabilityRequest
+    Analysis: AnalyzeStabilityResponse
+    //EnableLogging: boolean
+}
+
+/**
+ * The JSON format for an FurtherTesting API response.
+ */
+
+interface CounterExampleVariable {
+    Id: string
+    Value: number
+}
+
+interface CounterExampleOutput {
+    Status: string
+    Error?: string
+    Variables: CounterExampleVariable[]
+}
+export interface FurtherTestingResponse {
+    /** 
+     * True, if the formula is true for some simulations.
+     * False, if the formula is false for some simulations.
+     * 
+     * The boolean does not imply anything about the opposite.
+     * A AnalyzeLTLPolarity API request has to be made to determine
+     * whether the formula is true (false) for all simulations,
+     * or whether it is true for some and false for other simulations. 
+     */
+
+    /** If an error occurs, then this contains the error message. */
+    Error?: string
+    
+    CounterExamples: CounterExampleOutput[]
+    //Ticks: SimulationTick[]
+    
+    /** Detailed error messages. This may be null even if Error is defined. */
+    ErrorMessages?: string[]
+
+    /** Detailed debug messages. */
+    DebugMessages?: string[]
+}
