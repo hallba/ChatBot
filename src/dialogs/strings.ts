@@ -31,6 +31,7 @@ export let FORMULA_COUNT_100 = 'Congratulations! This is your 100th formula! Kee
 export let PROTOTYPE_WARNING = 'Warning: this is a prototype feature and may be incomplete.'
 export let PROTOTYPE_INCOMPLETE = 'This prototype feature is incomplete'
 export let API_UNAVAILABLE = 'This analysis will not be run as the BMA API is disabled.'
+export let BAD_RESULT = 'This analysis returned an unexpected response. Please retest in the BMA website and/or contact the developers.'
 
 // Formula history
 export let FORMULA_HISTORY = (formulas: string) => `I have the following formulas on record: \n\n ${formulas}`
@@ -104,4 +105,5 @@ export let DECREASE_STEPS = 'Decreasing the number of steps a query runs for can
 export let INCREASE_STEPS = 'Increasing the number of steps will give you a broader view of how the state values fluctuate over time, and may reveal several traces of your query being true.'
 
 //Stability proof
-export let STABLE_MODEL = 'The model is stable.'
+export let STABILITY_PROVED = 'The model was proved to be stable.'
+export let STABILITY_INCONCLUSIVE = 'The stability proof was inconclusive. Would you like to perform further testing?'

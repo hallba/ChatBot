@@ -37,14 +37,23 @@ export function registerStabilityDialog (bot: builder.UniversalBot, modelStorage
 function testStability (session: builder.Session, text: string, modelStorage: ModelStorage) {
     // fetch some session state
     let bmaModel: BMA.ModelFile = session.conversationData.bmaModel
-    /*BMAApi.stabilityAnalysis(bmaModel.Model).then(response => {
-        if (response.Status == 'Stable') {
-            session.send(strings.STABLE_MODEL)
-        } 
-    }) */
+
     BMAApi.runStabilityAnalysis(bmaModel.Model).then(response => {
-    console.log('Stability response :' + JSON.stringify(response))
-    session.send('The model is :' + response.Status)
+    //console.log('Stability response :' + JSON.stringify(response))
+    //session.send('The model is :' + response.Status)
+    if (response.Status == "Stabilizing") {
+        session.send(strings.STABILITY_PROVED)
+        session.endDialog()
+    } else if (response.Status = "NotStabilizing") {
+        session.send(strings.STABILITY_INCONCLUSIVE)
+        //builder.Prompts.confirm(session, strings.STABILITY_INCONCLUSIVE)
+        session.send(strings.PROTOTYPE_INCOMPLETE)
+        session.endDialog()
+    } else {
+        session.send(strings.BAD_RESULT)
+        session.endDialog()
+    }
+
     })
-    session.send(strings.PROTOTYPE_INCOMPLETE)
+    //session.send(strings.PROTOTYPE_INCOMPLETE)
 }
