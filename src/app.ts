@@ -29,13 +29,13 @@ if (config.get('SERVE_STATIC_VIA_EXPRESS') === '1') {
 }
 
 function storage() {
-    if (config.get('AZURE_COSMOSDB_ACCOUNT') == null) {
+    if (config.get('AZURE_COSMOSDB_URL') == null) {
         console.log('Conversations stored in memory')
         return new builder.MemoryBotStorage()
     } else {
         console.log('Conversations stored in cosmos db')
         var documentDbOptions = {
-            host: config.get<string>('AZURE_COSMOSDB_ACCOUNT'), 
+            host: config.get<string>('AZURE_COSMOSDB_URL'), 
             masterKey: config.get<string>('AZURE_COSMOSDB_KEY'), 
             database: 'botdocs',   
             collection: 'botdata'
