@@ -8,7 +8,9 @@ import * as url from 'url'
 import * as request from 'request'
 
 function testSkypeURL(contentUrl) {
-    return url.parse(contentUrl).hostname.substr(-'skype.com'.length) === 'skype.com'
+    let skype = url.parse(contentUrl).hostname.substr(-'skype.com'.length) === 'skype.com'
+    let smba  = url.parse(contentUrl).hostname.substr(-'smba.trafficmanager.net'.length) === 'smba.trafficmanager.net'
+    return skype || smba
 }
 
 /**
