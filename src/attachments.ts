@@ -7,6 +7,10 @@ import * as async from 'async'
 import * as url from 'url'
 import * as request from 'request'
 
+function testSkypeURL(contentUrl) {
+    return url.parse(contentUrl).hostname.substr(-'skype.com'.length) === 'skype.com'
+}
+
 /**
  * Downloads user attachments with support for Skype URLs which require authorization.
  */
@@ -20,7 +24,8 @@ export function downloadAttachments(connector, message, callback) {
                 contentType: attachment.contentType,
                 contentUrl: attachment.contentUrl
             })
-            if (url.parse(attachment.contentUrl).hostname.substr(-'skype.com'.length) === 'skype.com') {
+            if (testSkypeURL(attachment.contentUrl)) {
+                console.log("Found a skype URL")
                 containsSkypeUrl = true
             }
         }
@@ -42,7 +47,7 @@ export function downloadAttachments(connector, message, callback) {
                 async.forEachOf(attachments, function (item, idx, cb) {
                     var contentUrl = item.contentUrl
                     var headers = {}
-                    if (url.parse(contentUrl).hostname.substr(-'skype.com'.length) === 'skype.com') {
+                    if (testSkypeURL(contentUrl)) {
                         headers['Authorization'] = 'Bearer ' + token
                         headers['Content-Type'] = 'application/octet-stream'
                         console.log("Skype token aquired")
