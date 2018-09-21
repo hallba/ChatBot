@@ -12,6 +12,7 @@ import * as cors from 'cors'
 import * as config from 'config'
 import { BlobModelStorage } from './ModelStorage'
 import { setup as setupBot } from './bot'
+import * as azure from 'botbuilder-azure'
 
 let port = config.get('PORT')
 console.log('starting server on port:', port)
@@ -27,20 +28,38 @@ if (config.get('SERVE_STATIC_VIA_EXPRESS') === '1') {
     server.use('/static', express.static('public'))
 }
 
+function storage() {
+    if (config.get('AZURE_COSMOSDB_ACCOUNT') == null) {
+        console.log('Conversations stored in memory')
+        return new builder.MemoryBotStorage()
+    } else {
+        console.log('Conversations stored in cosmos db')
+        var documentDbOptions = {
+            host: config.get<string>('AZURE_COSMOSDB_ACCOUNT'), 
+            masterKey: config.get<string>('AZURE_COSMOSDB_KEY'), 
+            database: 'botdocs',   
+            collection: 'botdata'
+        };
+        var docDbClient = new azure.DocumentDbClient(documentDbOptions);
+        var cosmosStorage = new azure.AzureBotStorage({ gzipData: false }, docDbClient);
+        return cosmosStorage
+    }
+} 
+
 let bot: builder.UniversalBot
 if (config.get('USE_CONSOLE') === '1') {
     // Create console bot
-    var inMemoryStorage = new builder.MemoryBotStorage();    
+    var store = storage();    
     let connector = new builder.ConsoleConnector().listen()
-    bot = new builder.UniversalBot(connector,{storage:inMemoryStorage});
+    bot = new builder.UniversalBot(connector,{storage:store});
 } else {
-    var inMemoryStorage = new builder.MemoryBotStorage();
+    var store = storage();
     // Create server bot
     let connector = new builder.ChatConnector({
         appId: config.get<string>('APP_ID'),
         appPassword: config.get<string>('APP_PASSWORD')
     })
-    bot = new builder.UniversalBot(connector,{storage:inMemoryStorage});
+    bot = new builder.UniversalBot(connector,{storage:store});
     server.post('/api/messages', connector.listen())
 }
 
