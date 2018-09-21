@@ -21,13 +21,13 @@ export function downloadAttachments(connector, message, callback) {
     var containsSkypeUrl = false
     message.attachments.forEach(function (attachment) {
         if (attachment.contentUrl) {
-            console.log("contentURL :" + attachment.contentUrl)
+            //console.log("contentURL :" + attachment.contentUrl)
             attachments.push({
                 contentType: attachment.contentType,
                 contentUrl: attachment.contentUrl
             })
             if (testSkypeURL(attachment.contentUrl)) {
-                console.log("Found a skype URL")
+                //console.log("Found a skype URL")
                 containsSkypeUrl = true
             }
         }
@@ -37,7 +37,7 @@ export function downloadAttachments(connector, message, callback) {
             function (cb) {
                 if (containsSkypeUrl) {
                     connector.getAccessToken(cb)
-                    console.log("Skype token requested")
+                    //console.log("Skype token requested")
                 }
                 else {
                     cb(null, null)
@@ -52,7 +52,7 @@ export function downloadAttachments(connector, message, callback) {
                     if (testSkypeURL(contentUrl)) {
                         headers['Authorization'] = 'Bearer ' + token
                         headers['Content-Type'] = 'application/octet-stream'
-                        console.log("Skype token aquired")
+                        //console.log("Skype token aquired")
                     }
                     else {
                         headers['Content-Type'] = item.contentType
