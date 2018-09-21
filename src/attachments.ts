@@ -15,6 +15,7 @@ export function downloadAttachments(connector, message, callback) {
     var containsSkypeUrl = false
     message.attachments.forEach(function (attachment) {
         if (attachment.contentUrl) {
+            console.log("contentURL :" + attachment.contentUrl)
             attachments.push({
                 contentType: attachment.contentType,
                 contentUrl: attachment.contentUrl
