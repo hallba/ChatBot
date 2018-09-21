@@ -29,6 +29,7 @@ export function downloadAttachments(connector, message, callback) {
             function (cb) {
                 if (containsSkypeUrl) {
                     connector.getAccessToken(cb)
+                    console.log("Skype token requested")
                 }
                 else {
                     cb(null, null)
@@ -43,6 +44,7 @@ export function downloadAttachments(connector, message, callback) {
                     if (url.parse(contentUrl).hostname.substr(-'skype.com'.length) === 'skype.com') {
                         headers['Authorization'] = 'Bearer ' + token
                         headers['Content-Type'] = 'application/octet-stream'
+                        console.log("Skype token aquired")
                     }
                     else {
                         headers['Content-Type'] = item.contentType
