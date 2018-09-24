@@ -34,6 +34,7 @@ export function toHumanReadableString (node: AST.Node<any,any>, bmaModel: BMA.Mo
         let name = varName(node.value)
         return name.indexOf(' ') >= 0 ? '(' + name + ')' : name
     } else if (node.type === AST.Type.FormulaPointer) {
+        //This causes all formula history to be lost if a formula name is passed
         throw new Error('Unexpanded AST, use embedNamedFormulas()')
     } else if (_.contains(AST.TerminalTypes, node.type)) {
         return node.value
@@ -135,7 +136,7 @@ export function clampVariables<T extends AST.Node<any,any>> (node: T, bmaModel: 
  * Returns a new AST where all pointers to formulas have been replaced by the referenced formulas.
  */
 export function embedNamedFormulas (node: AST.Node<any,any>, bmaModel: BMA.ModelFile, namedFormulas: NamedFormula[]) {
-
+    console.log("embedNamedFormulas initiated")
     function doEmbed (node: AST.Node<any,any>) {
         if (node.left) {
             if (node.left.type === AST.Type.FormulaPointer) {
@@ -154,8 +155,20 @@ export function embedNamedFormulas (node: AST.Node<any,any>, bmaModel: BMA.Model
     }
 
     let nodeCopy = JSON.parse(JSON.stringify(node))
-    doEmbed(nodeCopy)
-    return nodeCopy
+    if (!nodeCopy.right && !nodeCopy.left) {
+        console.log("terminal")
+        if (nodeCopy.type === AST.Type.FormulaPointer) {
+            console.log("Found formula")
+            let formula = _.find(namedFormulas, f => f.id === node.value)
+            console.log(formula.ast)
+            return formula.ast
+        } else {
+            return nodeCopy
+        }
+    } else {
+        doEmbed(nodeCopy)
+        return nodeCopy
+    }
 }
 
 /**
