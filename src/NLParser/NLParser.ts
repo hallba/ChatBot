@@ -772,6 +772,7 @@ export default class NLParser extends Parser {
         // true/false is ignored because stemming them is not that useful
         // TODO move stemmed token classes in a list at the top of the module
         return sentence
+            .toString() //prevents it from mistaking the string "true" as the boolean "true"
             .split(' ')
             .map(t => ModelVariable.PATTERN.test(t) || FormulaPointerToken.PATTERN.test(t) || TrueLiteral.PATTERN.test(t) || FalseLiteral.PATTERN.test(t) ?
                 t :
