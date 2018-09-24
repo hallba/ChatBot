@@ -66,8 +66,7 @@ export let EXPLAIN_ALWAYS = 'Within a state model, the ALWAYS operator returns t
 export let EXPLAIN_EVENTUALLY = 'Within a state model, the EVENTUALLY operator returns true if some state in the future holds a true value.'
 export let EXPLAIN_UNTIL = 'Similar to the AND operator, the UNTIL operator requires two operands. For UNTIL, A until B, implies that A remains true until B becomes true.'
 export let EXPLAIN_RELEASE = 'This operator requires two operands. In the scenario, A RELEASE B: B holds a true value until and including the point when A first becomes true. If A is never true, B will remain true.'
-// TODO explain UPTO
-export let EXPLAIN_UPTO = 'This explains the upto operator '
+export let EXPLAIN_UPTO = 'This operator takes two operands. It is similar to UNTIL, except that A must hold in the simulation. It is equivalent to A AND NEXT A UNTIL B.'
 export let EXPLAIN_WEAKUNTIL = 'Similar to the UNTIL operator, in the example A WEAKUNTIL B, A remains true until B holds a true value, however it does not require B to ever hold a true value, and therefore A always remains true.' 
 
 // Operator examples
@@ -78,10 +77,9 @@ export let EXAMPLE_NOT = 'In the example where A is equal to 5, NOT A would retu
 export let EXAMPLE_NEXT = 'In the example where A is equal to 4, NEXT A returns true for the immediate state before a state where A is 4.'
 export let EXAMPLE_ALWAYS = 'In the example where A is equal to 7, ALWAYS A would return true if all the tested traces have a value of 7 for A.'
 export let EXAMPLE_EVENTUALLY = 'This works similar to the NEXT operator. For example if we have state A equal to 3, EVENTUALLY A would return true if future states hold a value of 3 for A.'
-export let EXAMPLE_UNTIL = 'We have two states; A = 1 and B = 2. A UNTIL B returns true for traces where A holds the value of 1 up until B becomes 2.'
+export let EXAMPLE_UNTIL = 'We have two states; A = 1 and B = 2. A UNTIL B returns true for traces where A holds the value of 1 up until B becomes 2. A need not occur.'
 export let EXAMPLE_RELEASE = 'In the example A RELEASE B, where A is 1 and B is 2, B will stay true with a value 2 up until the trace where A is 1. So essentially, at one point both A and B are true, and if A is never 1, then B will hold the value of 2.'
-// TODO example UPTO
-export let EXAMPLE_UPTO = 'Example for upto operator'
+export let EXAMPLE_UPTO = 'We have two states; A = 1 and B = 2. A UPTO B returns true for traces where A holds the value of 1 up until B becomes 2. A occurs at least once before B.'
 export let EXAMPLE_WEAKUNTIL = 'With states; A = 1 and B = 3, A WEAKUNTIL B implies that A holds a value of 1 up until B is equal to 3, but if B is never 3 then A will remain as 1.'
 
 // Operator interactions
