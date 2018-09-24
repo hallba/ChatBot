@@ -25,14 +25,24 @@ export function registerFormulaDialog (bot: builder.UniversalBot, modelStorage: 
                 session.save()
                 builder.Prompts.attachment(session, strings.MODEL_SEND_PROMPT)
             } else {
-                processFormulaText(session, text, modelStorage, skipBMAAPI)
-                session.endDialog()
+                if (text == null) {
+                    session.send(strings.FORMULA_MISSING)
+                    session.endDialog()
+                } else {
+                    processFormulaText(session, text, modelStorage, skipBMAAPI)
+                    session.endDialog()
+                }
             }
         },
         (session, results, next) => receiveModelAttachmentStep(bot, modelStorage, session, results, next),
         (session, results, next) => {
-            processFormulaText(session, session.conversationData.lastMessageText, modelStorage, skipBMAAPI)
-            delete session.conversationData.lastMessageText
+            if (session.conversationData.lastMessageText == null) {
+                session.send(strings.FORMULA_MISSING)
+                session.endDialog()
+            } else {
+                processFormulaText(session, session.conversationData.lastMessageText, modelStorage, skipBMAAPI)
+                delete session.conversationData.lastMessageText
+            }
         }
     ])
 }
