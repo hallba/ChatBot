@@ -96,7 +96,7 @@ class TrueLiteral extends Token {
 }
 
 class FalseLiteral extends Token {
-    static PATTERN = /false/
+    static PATTERN = /false/i
     // no LABEL here as we never output False directly, but transform it to Not True
 }
 
