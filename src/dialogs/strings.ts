@@ -45,6 +45,7 @@ export let FORMULA_RENAME_NAME_EMPTY = 'Formulas can only be renamed to non-empt
 export let FORMULA_REFERENCE_INVALID = (formulas: string) => `I could not find the formula you referenced. Here is a list of all formulas I know: \n\n ${formulas}`
 export let FORMULA_HISTORY_FIRST_NOTICE = 'I just remembered your first formula! You can recall and combine previous formulas. Try to ask me for all the formulas I remember.'
 export let FORMULA_HISTORY_FULL = 'I already remembered too many formulas. Let me forget old ones if you want me to keep remembering new formulas.'
+export let FORMULA_REMOVAL_WARNING = 'You are about to delete formula(s) from conversation memory. Confirm to proceed.'
 
 // Simulation outcomes
 export let SIMULATION_DUALITY = (steps: number) => `I tested the formula with ${steps} steps. The formula is sometimes true and sometimes false.`
