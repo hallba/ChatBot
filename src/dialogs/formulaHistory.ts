@@ -31,17 +31,27 @@ export function registerFormulaHistoryDialogs (bot: builder.UniversalBot) {
     /*
      * Removes all formulas in the history.
      */
-    bot.dialog('/removeFormulas', (session, args, next) => {
+    bot.dialog('/removeFormulas', [ (session, args, next) => {
+        builder.Prompts.confirm(session, strings.FORMULA_REMOVAL_WARNING)
+    },  
+    (session, results: builder.IPromptChoiceResult, next) => {
+        if (results.response) {
         let formulas: NamedFormula[] = session.conversationData.formulas
         if (!formulas || !formulas.length) {
             session.send(strings.FORMULA_HISTORY_EMPTY)
             next()
             return
+            }
+            delete session.conversationData.formulas
+            session.send(strings.FORMULA_HISTORY_CLEARED)
+            next()
+        } else {
+            session.send(strings.OK)
+            session.endDialog()
         }
-        delete session.conversationData.formulas
-        session.send(strings.FORMULA_HISTORY_CLEARED)
-        next()
-    })
+
+    }
+])
 
     /*
      * Removes a specific formula from the history, specified either by formula name
