@@ -34,6 +34,9 @@ The final step is to create a local configuration file `config/local.json` with 
 }
 ```
 
+When running locally, extra settings are taken from development.json; when deployed settings are
+taken from production.json.
+
 By default, in development mode the bot is run as a local server without authentication
 and works out of the box with the Bot Framework Emulator and Azure Storage Emulator. Due to
 security settings on the main deployment its recommended that developers clone and run a local 
@@ -98,6 +101,12 @@ The basic workflow below shows you how to add new features, with a worked exampl
 >    session.send(strings.PROTOTYPE)
 >})
 
+If you want to do something more complex than sending a string you need to set up a new dialogue, and 
+(in the case of the stability proof) create the appropriate functions and types in BMAAPI. Look into 
+dialogs/stability.ts to see an example of how a simple dialogue (steps here involve- checking there's 
+a model available and prompting the user; testing and returning the appropriate result; for one outcome
+prompt the user to decide on the final actions.
+
 ### Deployment
 
 The production chat bot is hosted on https://bmabot.azurewebsites.net/ as an Azure Web App.
@@ -117,6 +126,15 @@ Deployed web app must have the following variables set in Application settings:
 * LUIS_KEY = LUIS key
 * AZURE_STORAGE_ACCOUNT = blob storage account
 * AZURE_STORAGE_ACCESS_KEY = key for storage account
+
+Optionally, the following variables can be set if a cosmos DB is available
+
+* AZURE_COSMOSDB_URL = URI for the cosmos DB
+* AZURE_COSMOSDB_KEY = Key for cosmos db
+
+If these are set, conversations will have better history and the bot will use less memory (as information is 
+stored in the external database). This also minimises the chances of a new deployment causing your session 
+memory to be lost.
 
 Setting any more variables risks the deployed bot giving cryptic 500 errors due to clashes
 between application settings and automatically set variables.
