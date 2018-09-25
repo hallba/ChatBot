@@ -83,6 +83,7 @@ function testStability (session: builder.Session) {
 function furtherTesting (session: builder.Session) {
     let bmaModel: BMA.ModelFile = session.conversationData.bmaModel
     let previous = session.conversationData.previousResult
+    session.sendTyping();
     BMAApi.runFurtherTesting(bmaModel.Model,previous).then(response => {
         //console.log('Further testing response :' + JSON.stringify(response))
         for (let cex of response.CounterExamples) {
