@@ -124,7 +124,6 @@ function processFormulaText (session: builder.Session, text: string, modelStorag
     })
 
     if (!skipBMAAPI) {
-        session.sendTyping();
         // run formula on BMA backend and send result back to user
         let steps = 10
         let simulationOptions = {
@@ -132,7 +131,9 @@ function processFormulaText (session: builder.Session, text: string, modelStorag
             timeout: 30
         }
         let expandedFormula = BMAApi.getExpandedFormula(bmaModel.Model, ltl.states, ltl.operations[0])
+        session.sendTyping();
         BMAApi.runFastSimulation(bmaModel.Model, expandedFormula, simulationOptions).then(responseFast => {
+            session.sendTyping();
             BMAApi.runThoroughSimulation(bmaModel.Model, expandedFormula, responseFast, simulationOptions).then(responseThorough => {
 	    	if (responseThorough.Status) {
 		    console.log('BMAApi- Sometimes')
