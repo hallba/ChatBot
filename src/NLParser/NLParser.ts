@@ -724,7 +724,7 @@ export default class NLParser extends Parser {
         let modelVariableAndFormulaPointerRegex = new RegExp(
             hasFormulaPointers ?
                 modelVariableRelationOpRegex + '|' + '\\b(' + _.pluck(formulaPointers, 'name').join('|') + ')\\b' :
-                modelVariableRelationOpRegex, 'ig')
+                modelVariableRelationOpRegex, 'ig') //make matching case insensitive
 
         // collect all variables and formula pointers
         let matchedGroups
@@ -735,7 +735,7 @@ export default class NLParser extends Parser {
                 variableTokens.push({
                     offset: matchedGroups.index,
                     name: formulaPointer,
-                    id: _.find(formulaPointers, v => v.name === formulaPointer).id,
+                    id: _.find(formulaPointers, v => v.name.toLowerCase() === formulaPointer.toString().toLowerCase()).id, //Makes formulas case insensitive
                     type: FormulaPointerToken
                 })
             } else {
@@ -747,7 +747,6 @@ export default class NLParser extends Parser {
                 })
             }
         }
-
         // use the generated offsets to replace instances of variable usage with MODELVAR(k), where k is the model variable
         // similar for formula pointers
         // variableTokens can be empty when processing a resynched token stream
