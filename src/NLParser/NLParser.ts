@@ -139,7 +139,7 @@ let Implies = generateStemmedTokenDefinition('Implies', 'implies', ['implies'], 
 let Not = generateStemmedTokenDefinition('Not', 'not', ['not'], TokenType.UNARY_OPERATOR)
 
 // Temporal operator tokens
-let Eventually = generateStemmedTokenDefinition('Eventually', 'eventually', ['eventually', 'finally', 'ultimately', 'after all', 'at last', 'at some point', 'soon', 'at the end', 'sometime', 'possible'], TokenType.UNARY_OPERATOR)
+let Eventually = generateStemmedTokenDefinition('Eventually', 'eventually', ['eventually', 'finally', 'ultimately', 'after all', 'at last', 'at some point', 'soon', 'at the end', 'sometime', 'possible', 'ends in'], TokenType.UNARY_OPERATOR)
 let Always = generateStemmedTokenDefinition('Always', 'always', ['always', 'invariably', 'perpetually', 'forever', 'constantly'], TokenType.UNARY_OPERATOR)
 let Next = generateStemmedTokenDefinition('Next', 'next', ['next', 'after', 'then', 'consequently', 'afterwards', 'subsequently', 'followed by', 'after this', 'later', 'thereafter', 'directly after'], TokenType.UNARY_OPERATOR)
 let Upto = generateStemmedTokenDefinition('Upto', 'upto', ['upto'], TokenType.BINARY_OPERATOR)
