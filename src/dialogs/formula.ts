@@ -135,7 +135,8 @@ function processFormulaText (session: builder.Session, text: string, modelStorag
         BMAApi.runFastSimulation(bmaModel.Model, expandedFormula, simulationOptions).then(responseFast => {
             session.sendTyping();
             BMAApi.runThoroughSimulation(bmaModel.Model, expandedFormula, responseFast, simulationOptions).then(responseThorough => {
-	    	if (responseThorough.Status) {
+            session.sendTyping()
+            if (responseThorough.Status) {
 		    console.log('BMAApi- Sometimes')
                     session.send(strings.SIMULATION_DUALITY(steps))
 		} else if (responseFast.Status) {
