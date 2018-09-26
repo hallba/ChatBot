@@ -354,7 +354,7 @@ export interface AnalyzeStabilityResponse {
     DebugMessages?: string[]
 }
 
-export function runFurtherTesting (model: BMA.Model, analysis: AnalyzeStabilityResponse) : Promise<FurtherTestingResponse> {
+export function runFurtherTesting (model: BMA.Model, timeout, analysis: AnalyzeStabilityResponse) : Promise<FurtherTestingResponse> {
     console.log(`running further testing`)
     let url = BACKEND_URL + 'FurtherTesting'
     let mod: AnalyzeStabilityRequest = {

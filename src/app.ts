@@ -65,5 +65,5 @@ if (config.get('USE_CONSOLE') === '1') {
 
 bot.set("persistConversationData", "true") // this is false by default but we need to access data between unrelated dialogs
 let modelStorage = new BlobModelStorage()
-//console.log('Storage set up')
+
 setupBot(bot, modelStorage)
