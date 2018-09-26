@@ -26,4 +26,27 @@ export function registerUtilityDialogs (bot: builder.UniversalBot, modelStorage:
         (session, results, next) => receiveModelAttachmentStep(bot, modelStorage, session, results, next),
         (session, results, next) => session.endDialog()
     ])
+    bot.dialog('/changeTimeout', [
+        (session, args, next) => {
+            var newTimeout = parseInt(args)
+            if (newTimeout > 60) {
+                session.conversationData.timeOut = 60
+                session.send(strings.MAX_TIMEOUT)
+            } else if ( newTimeout < 1 || newTimeout == NaN ) {
+                session.conversationData.timeOut = 1
+                session.send(strings.MIN_TIMEOUT)
+            } else {
+                session.conversationData.timeOut = newTimeout
+                session.send(strings.NEW_TIMEOUT(newTimeout))
+            }
+            session.save()
+            session.endDialog()
+        }
+    ])
+    bot.dialog('/resetTimeout', [
+        (session, args, next) => {
+            delete session.conversationData.timeOut
+            session.endDialog()
+        }
+    ])
 }

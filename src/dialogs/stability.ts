@@ -73,8 +73,14 @@ function testStability (session: builder.Session) {
 function furtherTesting (session: builder.Session) {
     let bmaModel: BMA.ModelFile = session.conversationData.bmaModel
     let previous = session.conversationData.previousResult
+    if (session.conversationData.timeOut == null) { 
+        var timeOut = 30 
+    } else { 
+        console.log("Running further tests with custom timeout")
+        timeOut = session.conversationData.timeOut 
+    }
     session.sendTyping();
-    BMAApi.runFurtherTesting(bmaModel.Model,previous).then(response => {
+    BMAApi.runFurtherTesting(bmaModel.Model,timeOut,previous).then(response => {
         //console.log('Further testing response :' + JSON.stringify(response))
         for (let cex of response.CounterExamples) {
             if (cex.Status == "Cycle") {
@@ -90,10 +96,11 @@ function furtherTesting (session: builder.Session) {
                 session.send(strings.BAD_RESULT)
         }
         
-        
+        session.send("ending!")
         //session.send(strings.PROTOTYPE_INCOMPLETE)
     }, reject => { 
-        if (reject.code === 'ETIMEDOUT') {
+        //console.log("Rejection :" + reject)
+        if (reject.code === 'ETIMEDOUT' || reject.code === 'ESOCKETTIMEDOUT') {
             session.send(strings.FURTHER_TESTING_TIMEOUT)
         } else {
             session.send(strings.BAD_RESULT)

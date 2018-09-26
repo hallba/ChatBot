@@ -126,9 +126,14 @@ function processFormulaText (session: builder.Session, text: string, modelStorag
     if (!skipBMAAPI) {
         // run formula on BMA backend and send result back to user
         let steps = 10
+        if (session.conversationData.timeOut == null) {
+            var timeOut = 5 
+        } else { 
+            timeOut = session.conversationData.timeOut
+        }
         let simulationOptions = {
             steps,
-            timeout: 30
+            timeout: timeOut
         }
         let expandedFormula = BMAApi.getExpandedFormula(bmaModel.Model, ltl.states, ltl.operations[0])
         session.sendTyping();
