@@ -9,19 +9,9 @@ import {ModelStorage} from '../ModelStorage'
 import {getBMAModelUrl, LETTERS_F} from '../util'
 import {receiveModelAttachmentStep} from './modelStorage'
 import * as strings from './strings'
+import { reject } from 'async';
 
 export function registerStabilityDialog (bot: builder.UniversalBot, modelStorage: ModelStorage, skipBMAAPI: boolean) {
-    bot.dialog('/checkModel', [
-        (session, args, next) => {
-            if (!session.conversationData.bmaModel) {
-                builder.Prompts.attachment(session, strings.MODEL_SEND_PROMPT)
-            } else {
-                session.endDialog()
-            }
-        },
-        (session, results, next) => receiveModelAttachmentStep(bot, modelStorage, session, results, next),
-        (session, results, next) => session.endDialog()
-    ])
     bot.dialog('/furtherTesting', [
         (session, args: BMAApi.AnalyzeStabilityResponse, next) => {
             //let initialResult = args
@@ -102,5 +92,11 @@ function furtherTesting (session: builder.Session) {
         
         
         //session.send(strings.PROTOTYPE_INCOMPLETE)
-    })
+    }, reject => { 
+        if (reject.code === 'ETIMEDOUT') {
+            session.send(strings.FURTHER_TESTING_TIMEOUT)
+        } else {
+            session.send(strings.BAD_RESULT)
+        }
+    } )
 }

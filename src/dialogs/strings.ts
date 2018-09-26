@@ -109,3 +109,4 @@ export let STABILITY_PROVED = 'The model was proved to be stable.'
 export let STABILITY_INCONCLUSIVE = 'The fast stability check was inconclusive. Would you like to perform further testing (slower)?'
 export let FOUND_CYCLE = (steps:number) => `There is a cycle of length ${steps}.`
 export let FOUND_BIFURCATION = 'There is a bifurcation.'
+export let FURTHER_TESTING_TIMEOUT = "Further testing could not be completed before timeout occured."
