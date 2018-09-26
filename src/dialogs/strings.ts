@@ -32,6 +32,11 @@ export let PROTOTYPE_WARNING = 'Warning: this is a prototype feature and may be 
 export let PROTOTYPE_INCOMPLETE = 'This prototype feature is incomplete'
 export let API_UNAVAILABLE = 'This analysis will not be run as the BMA API is disabled.'
 export let BAD_RESULT = 'This analysis returned an unexpected response. Please retest in the BMA website and/or contact the developers.'
+export let NEW_TIMEOUT = (seconds: number) => `The timeout for slow calculations is set to ${seconds} seconds`
+export let MAX_TIMEOUT = 'The maximum timeout can be set to is 60 seconds'
+export let MIN_TIMEOUT = 'The minimum timeout can be set to is 1 second'
+export let RESET_TIMEOUT = 'Timeouts are reset to the defaults'
+export let BAD_DIALOG = (d:string) => `The dialog you requested is unavailable: ${d}`
 
 // Formula history
 export let FORMULA_HISTORY = (formulas: string) => `I have the following formulas on record: \n\n ${formulas}`

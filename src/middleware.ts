@@ -38,7 +38,12 @@ export function registerMiddleware (bot: builder.UniversalBot) {
                     }
                 }
                 let dialogId = '/' + dialogIdRegEx.exec(text)[0].substr(1)
-                session.beginDialog(dialogId, args)
+                try {
+                    session.beginDialog(dialogId, args)
+                } catch {
+                    session.send(strings.BAD_DIALOG(dialogId))
+                }
+                
             } else {
                 next()
             }
