@@ -96,7 +96,6 @@ function furtherTesting (session: builder.Session) {
                 session.send(strings.BAD_RESULT)
         }
         
-        session.send("ending!")
         //session.send(strings.PROTOTYPE_INCOMPLETE)
     }, reject => { 
         //console.log("Rejection :" + reject)
